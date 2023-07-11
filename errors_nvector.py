@@ -27,11 +27,11 @@ def find_components(ob0, ob1, fc1):
   print(f'CTE {cte}')
 
   # ATE
-  # there is no built-in function for ATE, so I am finding the closest point on the path c,
-  # and then the great circle distance between c and ob1
-  # also set ATE to negative if distance c to ob0 is less than distance ob0 to ob1
   c = path.closest_point_on_great_circle(fc1)
-  ate = c.distance_and_azimuth(ob1)[0] / 1852 * (-1 if c.distance_and_azimuth(ob0)[0] < ob0.distance_and_azimuth(ob1)[0] else 1)
+  ate_abs_m, azi_c, _ = c.distance_and_azimuth(ob1)
+  azi_ob0 = ob0.distance_and_azimuth(ob1)[1]
+  ate = ate_abs_m * (-1 if int(azi_c) == int(azi_ob0) else 1) / 1852
+
   print(f'ATE {ate}')
 
 for t in triplets:
