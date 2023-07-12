@@ -1,4 +1,5 @@
 import nvector as nv
+import math
 
 R = 6378137
 NM_CONV = 1 / 1852
@@ -28,6 +29,8 @@ def find_components(ob0, ob1, fc1):
   azi_ob1 = ob1.distance_and_azimuth(ob0)[1]
   ate = ate_abs_m * (1 if round(azi_c) == round(azi_ob1) else -1) * NM_CONV
 
-  return dpe, cte, ate
+  c_point = [float(c.latitude) / math.pi * 180, float(c.longitude) / math.pi * 180]
+
+  return dpe, cte, ate, c_point
 
   

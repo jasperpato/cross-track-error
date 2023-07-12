@@ -1,6 +1,7 @@
 import errors_nvector
 import errors_pyproj
 import sys
+import plot
 
 if len(sys.argv) > 1 and sys.argv[1] != "pyproj":
   method = "nvector"
@@ -25,12 +26,22 @@ if __name__ == '__main__':
     ((0, 0), (10, 0), (1, 0.1), (-540, -6.004)),
   ]
 
-  print(f'{method}')
+  print(f'{method}\n')
 
   # for t in triplets:
-  for tests in testcases:
+  for i, tests in enumerate(testcases):
+    title = f'testcase {i+1}'
+    print(title)
+
     t = tests[:3]
-    dpe, cte, ate = find_components(*t)
-    print(f'\nDPE {dpe}')
+    cs = find_components(*t)
+    dpe, cte, ate = cs[:3]
+
+    c = cs[-1] if method == 'nvector' else ''
+    if 'plot' in sys.argv: plot.plot(*t, c=c, title=title)
+
+    print(f'DPE {dpe}')
     print(f'ATE {ate}')
-    print(f'CTE {cte} # {tests[-1]}')
+    print(f'CTE {cte} # {tests[-1]}\n')
+
+  if 'plot' in sys.argv: plot.show()
