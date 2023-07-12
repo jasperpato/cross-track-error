@@ -37,6 +37,7 @@ def plot(ob0, ob1, fc1, c=None, title=''):
 
   plt.legend()
   plt.title(title)
+  plt.savefig(f'plots/{"".join(title.split())}')
 
 def show():
   plt.show()
