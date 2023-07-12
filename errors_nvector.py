@@ -23,14 +23,16 @@ def find_components(ob0, ob1, fc1):
   print(f'\nDPE {dpe}')
 
   # CTE
-  cte = path.cross_track_distance(fc1, method='greatcircle', radius=R) / 1852
+  # multiply by -1 because nvector seems to use opposite convention
+  cte = path.cross_track_distance(fc1, method='greatcircle', radius=R) / 1852 * -1
   print(f'CTE {cte}')
 
   # ATE
+  # if bearing from c to ob1 is the same as ob1 to ob0 ATE is positive, else negative
   c = path.closest_point_on_great_circle(fc1)
-  ate_abs_m, azi_c, _ = c.distance_and_azimuth(ob1)
-  azi_ob0 = ob0.distance_and_azimuth(ob1)[1]
-  ate = ate_abs_m * (-1 if int(azi_c) == int(azi_ob0) else 1) / 1852
+  ate_abs_m, azi_c = c.distance_and_azimuth(ob1)[:2]
+  azi_ob1 = ob1.distance_and_azimuth(ob0)[1]
+  ate = ate_abs_m * (1 if round(azi_c) == round(azi_ob1) else -1) / 1852
 
   print(f'ATE {ate}')
 
