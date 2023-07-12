@@ -10,9 +10,12 @@ geod = pyproj.Geod(sphere=True, a=R)
 
 def is_positive(a10, a12):
   ref = (a10 - 90) % 360 # perpendicular to cyclone path
+  a12 = a12 % 360
 
   # if fc1 lies to the left of reference bearing then ate is positive, else negative
-  if ref < 180: return a12 < ref or a12 > ref + 180
+  if ref < 180:
+    return a12 < ref or a12 > ref + 180
+  
   return a12 < ref and a12 > ref - 180
 
 def find_components(ob0, ob1, fc1):
@@ -28,19 +31,6 @@ def find_components(ob0, ob1, fc1):
 
   cte = math.asin(math.sin(d12 / R) * math.sin(np.radians(a12 - a10))) * R
   ate = math.acos(math.cos(d12 / R) / math.cos(cte / R)) * R * (1 if is_positive(a10, a12) else -1)
-
-  return d12 * NM_CONV, cte * NM_CONV, ate * NM_CONV
-
-if __name__ == '__main__':
   
-  triplets = [
-    ((-10.2, 94.4), (-10.4, 94.6), (-10.2651, 94.61872)), # CTE: 5.24 ATE: 6.29 (nautical miles)
-    ((-10.2, 94.4), (-11, 94.9), (-10.70625,	94.625)), # CTE: 14.83 ATE: 18.85 (nautical miles)
-  ]
-
-  for t in triplets:
-    dpe, cte, ate = find_components(*t)
-    print(f'\nDPE {dpe}')
-    print(f'CTE {cte}')
-    print(f'ATE {ate}')
+  return d12 * NM_CONV, cte * NM_CONV, ate * NM_CONV
 
