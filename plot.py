@@ -31,9 +31,11 @@ def plot(ob0, ob1, fc1, c=None, title=''):
   for lat, lon, col, name in info:
     map.scatter(lon, lat, latlon=True, s=10, c=col, marker='o', alpha=1, label=name)
 
-  if c:
-    x, y = map(lons, lats)
-    map.plot(x, y, linewidth=1)
+  if c: lats, lons = zip(ob1, c, fc1)
+  else: lats, lons = zip(ob1, fc1)
+  
+  x, y = map(lons, lats)
+  map.plot(x, y, linewidth=1)
 
   plt.legend()
   plt.title(title)
