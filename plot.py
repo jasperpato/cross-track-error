@@ -41,8 +41,7 @@ def plot(ob0, ob1, fc1, c=None, title=''):
   plt.title(title)
   plt.savefig(f'plots/{"".join(title.split())}')
 
-def show():
-  plt.show()
 
 if __name__ == '__main__':
   plot((-10.2, 94.4), (-10.4, 94.6), (-10.2651, 94.61872))
+  plt.show()
